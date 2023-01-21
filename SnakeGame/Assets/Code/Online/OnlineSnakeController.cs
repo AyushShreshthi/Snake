@@ -37,18 +37,13 @@ public class OnlineSnakeController : MonoBehaviourPunCallbacks {
 
         // Move forward
         transform.position += transform.forward * MoveSpeed * Time.deltaTime;/// * Input.GetAxis("Vertical");
-
-        float steerDirection = Input.GetAxis("Horizontal");
-
-        // Returns value -1, 0, or 1
-        transform.Rotate(Vector3.up * steerDirection * SteerSpeed * Time.deltaTime);
-
         // Store position history
         PositionsHistory.Insert(0, transform.position);
 
         // Move body parts
         int index = 0;
-        foreach (var body in BodyParts) {
+        foreach (var body in BodyParts)
+        {
             Vector3 point = PositionsHistory[Mathf.Clamp(index * Gap, 0, PositionsHistory.Count - 1)];
 
             // Move body towards the point along the snakes path
@@ -60,6 +55,30 @@ public class OnlineSnakeController : MonoBehaviourPunCallbacks {
 
             index++;
         }
+
+        float steerDirection;// = Input.GetAxis("Horizontal");
+        
+        float halfWidth = Screen.width / 2;
+
+        var touch = Input.GetTouch(0);
+        
+        var touchPos = touch.position;
+        float valuedAD;
+        if (touchPos.x < halfWidth)
+        {
+            valuedAD = -1;
+        }
+        else
+        {
+            valuedAD = 1;
+        }
+
+        steerDirection = valuedAD * (touchPos.x / halfWidth);
+
+        // Returns value -1, 0, or 1
+        transform.Rotate(Vector3.up * steerDirection * SteerSpeed * Time.deltaTime);
+
+        
     }
 
     public void GrowSnake() {
