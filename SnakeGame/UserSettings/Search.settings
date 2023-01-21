@@ -10,6 +10,9 @@ scopes = {
 	"last_search.DA949528" = "cinemachine"
 	"OpenInspectorPreview.DA949528" = "0"
 	"currentGroup.DA949528" = "all"
+	"last_search.CE949528" = "input"
+	"OpenInspectorPreview.CE949528" = "0"
+	"currentGroup.CE949528" = "all"
 }
 providers = {
 	adb = {

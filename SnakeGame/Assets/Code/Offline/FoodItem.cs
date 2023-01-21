@@ -30,7 +30,12 @@ public class FoodItem : MonoBehaviour
         {
             other.GetComponent<OnlineSnakeController>().GrowSnake();
             other.GetComponent<OnlineSnakeController>().EarnPoint();
-            PhotonNetwork.Destroy(gameObject);
+
+            OnlineManager.om.SpawnFood();
+
+            if(PhotonNetwork.IsMasterClient)
+                PhotonNetwork.Destroy(gameObject);
+
         }
     }
 }

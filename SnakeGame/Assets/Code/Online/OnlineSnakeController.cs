@@ -1,10 +1,6 @@
 ﻿using Photon.Pun;
-using Photon.Realtime;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class OnlineSnakeController : MonoBehaviourPunCallbacks {
 
@@ -29,8 +25,8 @@ public class OnlineSnakeController : MonoBehaviourPunCallbacks {
             return;
 
         playerNum = OnlineManager.om.playerNum;
-        GrowSnake();
-        GrowSnake();
+        //GrowSnake();
+        //GrowSnake();
     }
 
     // Update is called once per frame
@@ -43,6 +39,7 @@ public class OnlineSnakeController : MonoBehaviourPunCallbacks {
         transform.position += transform.forward * MoveSpeed * Time.deltaTime;/// * Input.GetAxis("Vertical");
 
         float steerDirection = Input.GetAxis("Horizontal");
+
         // Returns value -1, 0, or 1
         transform.Rotate(Vector3.up * steerDirection * SteerSpeed * Time.deltaTime);
 
@@ -76,14 +73,17 @@ public class OnlineSnakeController : MonoBehaviourPunCallbacks {
     }
     public void EarnPoint()
     {
+        if (!photonView.IsMine) return;
+
         OnlineManager.om.ScoreUpdate(playerNum);
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Wall" || other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Wall" )
         {
-
+            transform.position = OnlineManager.om.playerPos[playerNum].position;
         }
+        
     }
 
 }

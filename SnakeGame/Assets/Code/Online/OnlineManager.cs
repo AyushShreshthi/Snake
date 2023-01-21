@@ -41,6 +41,8 @@ public class OnlineManager : MonoBehaviourPunCallbacks
     }
     private void Update()
     {
+
+
         timer -= Time.deltaTime;
         if (timer >= 0)
         {
@@ -49,6 +51,32 @@ public class OnlineManager : MonoBehaviourPunCallbacks
         else
         {
             endingPanel.SetActive(true);
+
+
+            if (playerNum == 0)
+            {
+                
+                if (score_1 > score_2)
+                {
+                    endingPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "YOU WIN !!! ";
+                }
+                else
+                {
+                    endingPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "YOU LOSE !!! ";
+                }
+            }
+            else
+            {
+
+                if (score_1 < score_2)
+                {
+                    endingPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "YOU WIN !!! ";
+                }
+                else
+                {
+                    endingPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = "YOU LOSE !!! ";
+                }
+            }
         }
     }
     void SpawnPlayers()
@@ -71,11 +99,14 @@ public class OnlineManager : MonoBehaviourPunCallbacks
 
     }
 
-    void SpawnFood()
+    public void SpawnFood()
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.Instantiate(onlineFood.name, Vector3.zero, Quaternion.identity);
+            float randX = Random.Range(-20, 20);
+            float randZ = Random.Range(-20, 20);
+
+            GameObject go = PhotonNetwork.Instantiate(onlineFood.name, new Vector3(randX, 0, randZ), Quaternion.identity);
         }
     }
 
@@ -84,10 +115,17 @@ public class OnlineManager : MonoBehaviourPunCallbacks
     {
         int scores = 0;
         if (playerNum == 0)
+        {
             scores = score_1 + 1;
+            score_1 = scores;
+        }
         else
+        {
             scores = score_2 + 1;
+            score_2 = scores;
+        }
 
+       
         photonView.RPC("EarnScore", RpcTarget.All, scores, playerNum);
     }
     [PunRPC]
