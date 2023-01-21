@@ -1,13 +1,14 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SnakeController : MonoBehaviour {
+public class OnlineSnakeController : MonoBehaviourPunCallbacks {
 
-
+    public int playerNum = 0;
     // Settings
     public float MoveSpeed = 5;
     public float SteerSpeed = 180;
@@ -21,11 +22,13 @@ public class SnakeController : MonoBehaviour {
     private List<GameObject> BodyParts = new List<GameObject>();
     private List<Vector3> PositionsHistory = new List<Vector3>();
 
-    bool GameEnd = false;
-    [SerializeField] private GameObject gameEndPanel;
-
     // Start is called before the first frame update
     void Start() {
+
+        if (!photonView.IsMine)
+            return;
+
+        playerNum = OnlineManager.om.playerNum;
         GrowSnake();
         GrowSnake();
     }
@@ -33,8 +36,8 @@ public class SnakeController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        if (GameEnd) return;
-
+        if (!photonView.IsMine)
+            return;
 
         // Move forward
         transform.position += transform.forward * MoveSpeed * Time.deltaTime;/// * Input.GetAxis("Vertical");
@@ -65,40 +68,22 @@ public class SnakeController : MonoBehaviour {
     public void GrowSnake() {
         // Instantiate body instance and
         // add it to the list
-        GameObject body = Instantiate(BodyPrefab,transform.position,transform.rotation);
+
+        if (!photonView.IsMine) return;
+
+        GameObject body = PhotonNetwork.Instantiate(BodyPrefab.name,transform.position,transform.rotation);
         BodyParts.Add(body);
     }
-
+    public void EarnPoint()
+    {
+        OnlineManager.om.ScoreUpdate(playerNum);
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Wall" || other.gameObject.tag == "Player")
         {
-            GameEnd = true;
 
-            gameEndPanel.SetActive(true);
         }
     }
 
-    private int score = 0;
-    public TMP_Text scoreText;
-    public void EarnPoint()
-    {
-        score++;
-        scoreText.text = "Score - " + score.ToString();
-        MoveSpeed += 0.2f;
-        BodySpeed += 0.2f;
-    }
-    public void MenuBtn()
-    {
-        StartCoroutine(LeavingScene());
-    }
-
-    IEnumerator LeavingScene()
-    {
-        PhotonNetwork.Disconnect();
-        while (PhotonNetwork.IsConnected)
-            yield return null;
-
-        SceneManager.LoadScene(0);
-    }
 }
