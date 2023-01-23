@@ -56,25 +56,25 @@ public class OnlineSnakeController : MonoBehaviourPunCallbacks {
             index++;
         }
 
-        float steerDirection;// = Input.GetAxis("Horizontal");
-        
-        float halfWidth = Screen.width / 2;
+        //float steerDirection;// = Input.GetAxis("Horizontal");
 
-        var touch = Input.GetTouch(0);
-        
-        var touchPos = touch.position;
-        float valuedAD;
-        if (touchPos.x < halfWidth)
-        {
-            valuedAD = -1;
-        }
-        else
-        {
-            valuedAD = 1;
-        }
+        //float halfWidth = Screen.width / 2;
 
-        steerDirection = valuedAD * (touchPos.x / halfWidth);
+        //var touch = Input.GetTouch(0);
 
+        //var touchPos = touch.position;
+        //float valuedAD;
+        //if (touchPos.x < halfWidth)
+        //{
+        //    valuedAD = -1;
+        //}
+        //else
+        //{
+        //    valuedAD = 1;
+        //}
+
+        //steerDirection = valuedAD * (touchPos.x / halfWidth);
+        float steerDirection = Input.GetAxis("Horizontal");
         // Returns value -1, 0, or 1
         transform.Rotate(Vector3.up * steerDirection * SteerSpeed * Time.deltaTime);
 

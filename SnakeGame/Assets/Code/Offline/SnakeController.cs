@@ -57,26 +57,26 @@ public class SnakeController : MonoBehaviour {
 
             index++;
         }
-        ///float steerDirection = Input.GetAxis("Horizontal");
+        float steerDirection = Input.GetAxis("Horizontal");
 
-        float steerDirection;// = Input.GetAxis("Horizontal");
+        //float steerDirection;// = Input.GetAxis("Horizontal");
 
-        float halfWidth = Screen.width / 2;
+        //float halfWidth = Screen.width / 2;
 
-        var touch = Input.GetTouch(0);
+        //var touch = Input.GetTouch(0);
 
-        var touchPos = touch.position;
-        float valuedAD;
-        if (touchPos.x < halfWidth)
-        {
-            valuedAD = -1;
-        }
-        else
-        {
-            valuedAD = 1;
-        }
+        //var touchPos = touch.position;
+        //float valuedAD;
+        //if (touchPos.x < halfWidth)
+        //{
+        //    valuedAD = -1;
+        //}
+        //else
+        //{
+        //    valuedAD = 1;
+        //}
 
-        steerDirection = valuedAD * (touchPos.x / halfWidth);
+        //steerDirection = valuedAD * (touchPos.x / halfWidth);
         // Returns value -1, 0, or 1
         transform.Rotate(Vector3.up * steerDirection * SteerSpeed * Time.deltaTime);
 
